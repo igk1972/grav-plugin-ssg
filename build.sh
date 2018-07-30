@@ -1,0 +1,57 @@
+#!/bin/bash
+
+export GRAV_ROOT=${1} DIST_DIR=${2} HTTP_HOST=${3}
+
+export REQUEST_SCHEME=https HTTP_METHOD=GET BUILD_CMD="php -c . -f index.php" BUILD=true
+
+
+[ -L ${GRAV_ROOT}/build ] || ln -s $(pwd) ${GRAV_ROOT}/build
+
+[ -L ${GRAV_ROOT}/setup.php ] || ln -s $(pwd)/$(dirname ${0})/setup.php ${GRAV_ROOT}/setup.php
+
+
+mkdir "/tmp/lock-${HTTP_HOST}" > /dev/null 2>&1 || exit 1
+
+
+if [ "$(uname)" == "Darwin" ]; then
+  ISED='-i .bak'
+else
+  ISED='--in-place=.bak'
+fi
+
+
+pushd "${GRAV_ROOT}" > /dev/null 2>&1
+
+
+echo "Clean: ${DIST_DIR}" && rm -fr "${DIST_DIR}" && mkdir -p "${DIST_DIR}" || {
+    rmdir "/tmp/lock-${HTTP_HOST}" > /dev/null 2>&1
+    popd  > /dev/null 2>&1
+    exit 1
+}
+
+echo "Build: /" && mkdir -p "${DIST_DIR}" && REQUEST_URI=/ ${BUILD_CMD} > "${DIST_DIR}/index.html"
+
+REQUEST_URI=/sitemap ${BUILD_CMD} > "${DIST_DIR}/sitemap.xml"
+
+BUILD_SITEMAP="$(cat "${DIST_DIR}/sitemap.xml" | grep '<loc>' | sed -E "s# *</*loc>##g; s#${REQUEST_SCHEME}://${HTTP_HOST}##" | grep -v -E '^$')"
+
+for BUILD_URI in ${BUILD_SITEMAP} ; do
+  echo "Build: ${BUILD_URI}" && mkdir -p "${DIST_DIR}/${BUILD_URI}" && REQUEST_URI=${BUILD_URI} ${BUILD_CMD} > "${DIST_DIR}${BUILD_URI}/index.html"
+done
+
+
+BUILD_STATIC="$(find "$(dirname "${DIST_DIR}")/static" -mindepth 1 -maxdepth 1 -not -name '.*' | tr "\n" ' ')"
+echo "Copy: static" && cp -r ${BUILD_STATIC} "${DIST_DIR}/"
+
+
+echo "Relink: static" && {
+  find "${DIST_DIR}" -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -exec \
+    sed $ISED -E "s#/build/static##g" {} +
+  find "${DIST_DIR}" -type f -name '*.bak' -delete
+}
+
+
+rmdir "/tmp/lock-${HTTP_HOST}" > /dev/null 2>&1
+
+popd  > /dev/null 2>&1
+
