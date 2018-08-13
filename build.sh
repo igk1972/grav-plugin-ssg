@@ -5,11 +5,6 @@ export GRAV_ROOT=${1} DIST_DIR=${2} HTTP_HOST=${3}
 export REQUEST_SCHEME=https HTTP_METHOD=GET BUILD_CMD="php -c . -f index.php" BUILD=true
 
 
-[ -L ${GRAV_ROOT}/build ] || ln -s $(pwd) ${GRAV_ROOT}/build
-
-[ -L ${GRAV_ROOT}/setup.php ] || ln -s $(pwd)/$(dirname ${0})/setup.php ${GRAV_ROOT}/setup.php
-
-
 mkdir "/tmp/lock-${HTTP_HOST}" > /dev/null 2>&1 || exit 1
 
 
