@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GRAV_ROOT=${1} DIST_DIR=${2} HTTP_HOST=${3}
+export GRAV_ROOT=${1} STATIC_DIR=${2} DIST_DIR=${3} HTTP_HOST=${4}
 
 export REQUEST_SCHEME=https HTTP_METHOD=GET BUILD_CMD="php -c . -f index.php" BUILD=true
 
@@ -35,13 +35,13 @@ for BUILD_URI in ${BUILD_SITEMAP} ; do
 done
 
 
-BUILD_STATIC="$(find "$(dirname "${DIST_DIR}")/static" -mindepth 1 -maxdepth 1 -not -name '.*' | tr "\n" ' ')"
+BUILD_STATIC="$(find "${STATIC_DIR}" -mindepth 1 -maxdepth 1 -not -name '.*' | tr "\n" ' ')"
 echo "Copy: static" && cp -r ${BUILD_STATIC} "${DIST_DIR}/"
 
 
 echo "Relink: static" && {
   find "${DIST_DIR}" -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -exec \
-    sed $ISED -E "s#/build/static##g" {} +
+    sed $ISED -E "s#/site/static##g" {} +
   find "${DIST_DIR}" -type f -name '*.bak' -delete
 }
 
