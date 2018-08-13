@@ -13,7 +13,7 @@ return [
         'force' => true,
         'prefixes' => [
           '' => ['build'],
-          'config' => ['builds/grav/config'],
+          'config' => ['build/grav/config'],
           'accounts' => ['build/grav/accounts'],
           'plugins' => ['build/grav/plugins'],
           'pages' => ['build/content'],

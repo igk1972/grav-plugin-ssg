@@ -48,5 +48,5 @@ echo "Relink: static" && {
 
 rmdir "/tmp/lock-${HTTP_HOST}" > /dev/null 2>&1
 
-popd  > /dev/null 2>&1
+popd > /dev/null 2>&1
 
