@@ -12,12 +12,12 @@ return [
         'type' => 'ReadOnlyStream',
         'force' => true,
         'prefixes' => [
-          '' => ['build'],
-          'config' => ['build/grav/config'],
-          'accounts' => ['build/grav/accounts'],
-          'plugins' => ['build/grav/plugins'],
-          'pages' => ['build/content'],
-          'static' => ['build/static'],
+          ''         => ['app'],
+          'config'   => ['app'.'/grav/config'],
+          'accounts' => ['app'.'/grav/accounts'],
+          'plugins'  => ['app'.'/grav/plugins'],
+          'pages'    => ['app'.'/content'],
+          'public'   => ['app'.'/dist/public'],
         ]
       ],
       'config' => [
@@ -61,14 +61,14 @@ return [
         'type' => 'Stream',
         'force' => true,
         'prefixes' => [
-          '' => ['user://static/assets'],
+          '' => ['user://public/assets'],
         ]
       ],
       'asset' => [
         'type' => 'Stream',
         'force' => true,
         'prefixes' => [
-          '' => ['user://static/assets'],
+          '' => ['user://public/assets'],
         ]
       ],
       'plugins' => [
@@ -99,8 +99,8 @@ return [
         'type' => 'Stream',
         'force' => true,
         'prefixes' => [
-          '' => ['cache'],
-          'images' => ['static://images'],
+          ''         => ['user://public/cache'],
+          'images'   => ['user://public/images']
         ]
       ]
     ]
