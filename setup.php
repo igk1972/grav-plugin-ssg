@@ -12,12 +12,13 @@ return [
         'type' => 'ReadOnlyStream',
         'force' => true,
         'prefixes' => [
-          ''         => ['app'],
-          'config'   => ['app'.'/grav/config'],
-          'accounts' => ['app'.'/grav/accounts'],
-          'plugins'  => ['app'.'/grav/plugins'],
-          'pages'    => ['app'.'/content'],
-          'public'   => ['app'.'/dist/public'],
+          ''           => ['app'],
+          'config'     => ['app'.'/grav/config'],
+          'accounts'   => ['app'.'/grav/accounts'],
+          'plugins'    => ['app'.'/grav/plugins'],
+          'pages'      => ['app'.'/content'],
+          'blueprints' => ['app'.'/grav/blueprints'],
+          'public'     => ['app'.'/dist/public'],
         ]
       ],
       'config' => [
