@@ -3,7 +3,7 @@
 if ($envGravEnvironment = getenv('GRAV_ENV')) {
   $environment = strtolower($envGravEnvironment);
 }
-$environment = 'grav/environments/'.$environment;
+$environment = 'grav/environments/'.preg_replace('/^www\.|(\..+)$/', '', $environment);
 
 return [
   'streams' => [
